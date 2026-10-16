@@ -80,7 +80,7 @@ build_ffmpeg() {
         --enable-protocol=file,rtmp,rtmpt,rtmps,rtsp,http,https,tcp,udp \
         >/dev/null
     make -j"$(nproc)" >/dev/null
-    make install >/dev/null
+    make install >/dev/null STRIP="echo"
     popd >/dev/null
     ok "ffmpeg $ABI → $PREFIX"
 }
