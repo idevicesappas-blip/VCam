@@ -141,9 +141,9 @@ build_aidl() {
     mkdir -p "$AIDL_OUT/include" "$AIDL_OUT/src"
     local AIDL_BIN="$SDK_DIR/build-tools/34.0.0/aidl"
 
-    local AIDL_INC="-I$ROOT/aosp/hardware_interfaces/camera/provider/aidl -I$ROOT/aosp/hardware_interfaces/camera/device/aidl -I$ROOT/aosp/hardware_interfaces/camera/common/aidl -I$ROOT/aosp/hardware_interfaces/graphics/common/aidl -I$ROOT/aosp/system_interfaces/common/aidl"
+    local AIDL_INC="-I$ROOT/aosp/hardware_interfaces/camera/provider/aidl -I$ROOT/aosp/hardware_interfaces/camera/device/aidl -I$ROOT/aosp/hardware_interfaces/camera/common/aidl -I$ROOT/aosp/hardware_interfaces/graphics/common/aidl"
 
-    find "$ROOT/aosp/hardware_interfaces/camera" "$ROOT/aosp/hardware_interfaces/graphics/common" "$ROOT/aosp/system_interfaces/common" -name "*.aidl" -type f | while read -r f; do
+    find "$ROOT/aosp/hardware_interfaces/camera" "$ROOT/aosp/hardware_interfaces/graphics/common" -name "*.aidl" -type f | while read -r f; do
         "$AIDL_BIN" --lang=ndk $AIDL_INC -h "$AIDL_OUT/include" -o "$AIDL_OUT/src" "$f" 2>/dev/null || true
     done
     ok "Bindings AIDL generados en native/aidl_gen"
