@@ -35,7 +35,9 @@ jobs:
       - name: Deps
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y ninja-build zip
+          sudo apt-get install -y ninja-build zip dos2unix
+          dos2unix build_all.sh
+          chmod +x build_all.sh
 
       - name: Build ALL (ffmpeg → engine → APK → module)
         run: ./build_all.sh
