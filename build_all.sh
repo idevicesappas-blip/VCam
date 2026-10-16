@@ -97,7 +97,10 @@ fi
 build_engine() {
     local ABI=$1
     local BUILDDIR="$OUT/native-$ABI"
-    local SDK_LEVEL=$(( ABI == "arm64-v8a" ? 34 : 29 ))
+    local SDK_LEVEL=29
+    if [ "$ABI" = "arm64-v8a" ]; then
+        SDK_LEVEL=34
+    fi
     c "Compilando motor C++ ($ABI)"
     cmake -G Ninja -B "$BUILDDIR" -S "$ROOT/native" \
         -DCMAKE_TOOLCHAIN_FILE="$NDK_DIR/build/cmake/android.toolchain.cmake" \
