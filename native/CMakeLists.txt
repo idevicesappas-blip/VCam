@@ -14,7 +14,7 @@ add_library(vcam_core STATIC
     video_source.cpp
 )
 target_include_directories(vcam_core PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_compile_options(vcam_core PRIVATE -O2 -fno-exceptions-safe)
+target_compile_options(vcam_core PRIVATE -O2 -fno-exceptions)
 target_link_libraries(vcam_core
     PUBLIC
     ${FFMPEG_ROOT}/lib/libavformat.so
