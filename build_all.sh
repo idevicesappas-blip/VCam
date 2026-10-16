@@ -58,7 +58,7 @@ build_ffmpeg() {
             EXTRA="--arch=aarch64" ;;
         armeabi-v7a)
             CC="$NDK_DIR/toolchains/llvm/prebuilt/$HOSTTAG/bin/armv7a-linux-androideabi${API_MIN}-clang"
-            EXTRA="--arch=arm --enable-armv7te" ;;
+            EXTRA="--arch=arm --cpu=armv7-a" ;;
     esac
     CXX="${CC}++"
 
