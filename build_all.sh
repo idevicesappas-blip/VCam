@@ -121,8 +121,7 @@ build_engine() {
         find "$BUILDDIR" -name "libc++_shared.so" -exec cp -f {} "$ENGDIR/" \;
         ok "motor $ABI → module/engine/$ABI/"
     else
-        echo "⚠️ ERROR: Falló compilación nativa (Faltan cabeceras AOSP?). Generando binario DUMMY para el ZIP..."
-        echo "DUMMY_BINARY" > "$ENGDIR/vcam_provider_aidl"
+        err "ERROR: Falló compilación nativa. Faltan cabeceras AOSP."
     fi
 }
 
