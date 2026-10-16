@@ -1,0 +1,64 @@
+name: VCam Build
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: NDK + CMake
+        run: |
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "ndk;26.2.11394342" "cmake;3.22.1" > /dev/null
+          sdkmanager --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
+
+      - name: Cache FFmpeg prebuilt
+        uses: actions/cache@v4
+        with:
+          path: prebuilt/ffmpeg
+          key: ffmpeg-6.1.1-${{ runner.os }}
+
+      - name: Deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ninja-build zip
+
+      - name: Build ALL (ffmpeg → engine → APK → module)
+        run: ./build_all.sh
+        env:
+          NDK_DIR: $HOME/Android/Sdk/ndk/26.2.11394342
+          SDK_DIR: $HOME/Android/Sdk
+
+      - name: Upload módulo
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcam-module
+          path: out/vcam-*-module.zip
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcam-apk
+          path: out/VCam-*-release.apk
+
+      - name: Release (en tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/vcam-*-module.zip
+            out/VCam-*-release.apk

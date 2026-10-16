@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ================================================================
+         PERMISOS - cada uno con su razón
+         ================================================================ -->
+
+    <!-- ★ OBLIGATORIO: abrir streams RTMP/RTSP/HTTP desde OBS -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- ★ OBLIGATORIO: controles flotantes (FloatingControls service) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- ★ OBLIGATORIO: lectura de galería para seleccionar video/imagen
+         (Android 10+ Scoped Storage: leemos vía SAF, no pedimos ALL_FILES) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Android 10-12 (READ_MEDIA_* es API 33+) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+
+    <!-- ★ NEEDED: mantener el feed vivo mientras la inyección está activa
+         (evita que el sistema mate la app que escribe config.json) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- Preview: el MediaPlayer reproduce justo lo que se inyecta -->
+    <uses-permission android:name="android.permission.CAMERA"
+        android:required="false" tools:node="remove"/>
+
+    <!-- SELinux/Shell vía libsu: no requiere permiso Android, requiere ROOT
+         (Magisk / KernelSU / KernelSU-Next otorgan el shell su) -->
+
+    <!-- Evitamos que el propio APK exija cámara (no la usa: solo inyecta) -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <!-- Pantalla flotante disponible en tablets TVs etc -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="VCam"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+        tools:targetApi="34">
+
+        <!-- ================= ACTIVITY PRINCIPAL ================= -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- Compartir video/imagen desde galería → VCam (atajo útil) -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="video/*"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+        </activity>
+
+        <!-- ================= SERVICIO: CONTROLES FLOTANTES ============= -->
+        <service
+            android:name=".FloatingControls"
+            android:exported="false"/>
+
+        <!-- ================= SERVICIO: WATCHDOG DE INYECCIÓN ============
+             Mantiene la inyección viva aunque cierres la app.
+             Lanza emergencyRestore() si el stack de cámara muere. -->
+        <service
+            android:name=".InjectionWatchdogService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback">
+            <intent-filter>
+                <action android:name="vcam.action.START_WATCH"/>
+            </intent-filter>
+        </service>
+
+        <!-- ================= PROVIDER: FileProvider para compartir ===== -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+    </application>
+</manifest>

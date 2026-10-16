@@ -1,0 +1,23 @@
+cc_library_shared {
+    name: "engine_hidl",
+    srcs: ["vcam_config.cpp", "frame_processor.cpp", "video_source.cpp",
+           "hal_wrapper_hidl.cpp"],
+    cflags: ["-O2", "-std=c++17", "-fvisibility=default"],
+    shared_libs: ["libhidlbase", "liblog",
+        "android.hardware.camera.provider@2.4",
+        "android.hardware.camera.provider@2.5",
+        "android.hardware.camera.provider@2.6",
+        "android.hardware.camera.provider@2.7",
+        "libavformat", "libavcodec", "libswscale", "libswresample"],
+    stl: "c++_static",
+}
+cc_library_shared {
+    name: "engine_aidl",
+    srcs: ["vcam_config.cpp", "frame_processor.cpp", "video_source.cpp",
+           "hal_wrapper_aidl.cpp"],
+    cflags: ["-O2", "-std=c++17", "-fvisibility=default"],
+    shared_libs: ["libbinder_ndk", "liblog",
+        "android.hardware.camera.provider-V1-ndk",
+        "libavformat", "libavcodec", "libswscale", "libswresample"],
+    stl: "c++_static",
+}

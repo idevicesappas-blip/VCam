@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fondo: azul noche degradado simulado (flat) -->
+    <color name="ic_launcher_background">#0D1B2A</color>
+</resources>

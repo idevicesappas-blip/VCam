@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ▶ Iniciar inyección con la última fuente usada -->
+    <shortcut
+        android:shortcutId="start_injection"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_start"
+        android:shortcutShortLabel="@string/shortcut_start_short"
+        android:shortcutLongLabel="@string/shortcut_start_long"
+        android:shortcutDisabledMessage="@string/shortcut_start_disabled">
+        <intent
+            android:action="vcam.action.QUICK_START"
+            android:targetPackage="com.vcam.controller"
+            android:targetClass="com.vcam.controller.MainActivity"/>
+    </shortcut>
+
+    <!-- ⏹ Detener inyección -->
+    <shortcut
+        android:shortcutId="stop_injection"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_stop"
+        android:shortcutShortLabel="@string/shortcut_stop_short"
+        android:shortcutLongLabel="@string/shortcut_stop_long"
+        android:shortcutDisabledMessage="@string/shortcut_stop_disabled">
+        <intent
+            android:action="vcam.action.QUICK_STOP"
+            android:targetPackage="com.vcam.controller"
+            android:targetClass="com.vcam.controller.MainActivity"/>
+    </shortcut>
+
+    <!-- 🔧 Restaurar cámaras físicas (emergencia) -->
+    <shortcut
+        android:shortcutId="restore_cameras"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_restore"
+        android:shortcutShortLabel="@string/shortcut_restore_short"
+        android:shortcutLongLabel="@string/shortcut_restore_long"
+        android:shortcutDisabledMessage="@string/shortcut_restore_disabled">
+        <intent
+            android:action="vcam.action.QUICK_RESTORE"
+            android:targetPackage="com.vcam.controller"
+            android:targetClass="com.vcam.controller.MainActivity"/>
+    </shortcut>
+
+</shortcuts>

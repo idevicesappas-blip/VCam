@@ -1,0 +1,2 @@
+allow hal_camera_default { media_rw_data_file adb_data_file } file { rw_file_perms open read getattr }
+allow cameraserver { media_rw_data_file adb_data_file } file { rw_file_perms open read getattr }

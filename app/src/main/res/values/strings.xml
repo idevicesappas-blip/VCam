@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shortcuts (máx 10 chars short label recomendado, 25 long) -->
+    <string name="shortcut_start_short">▶ Inyectar</string>
+    <string name="shortcut_start_long">▶ Iniciar con última fuente</string>
+    <string name="shortcut_start_disabled">Configura una fuente primero</string>
+
+    <string name="shortcut_stop_short">⏹ Detener</string>
+    <string name="shortcut_stop_long">⏹ Detener inyección</string>
+    <string name="shortcut_stop_disabled">No hay inyección activa</string>
+
+    <string name="shortcut_restore_short">🔧 Restaurar</string>
+    <string name="shortcut_restore_long">🔧 Restaurar cámaras físicas</string>
+    <string name="shortcut_restore_disabled">Cámaras físicas ya activas</string>
+
+    <!-- UI general (buenas prácticas: extraer los literals existentes) -->
+    <string name="app_name">VCam</string>
+</resources>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:padding="16dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="🎥 VCam — Cámara Virtual HAL" android:textSize="20sp" android:textStyle="bold"/>
+
+    <!-- Preview de lo inyectado -->
+    <FrameLayout android:layout_width="match_parent" android:layout_height="220dp"
+        android:layout_marginTop="12dp" android:background="#000">
+      <TextureView android:id="@+id/preview"
+          android:layout_width="match_parent" android:layout_height="match_parent"/>
+      <TextView android:id="@+id/previewState" android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:layout_gravity="top|end"
+          android:text="🔴 Inyección detenida" android:padding="6dp"
+          android:textColor="#fff" android:shadowColor="#000"/>
+    </FrameLayout>
+    <TextView android:id="@+id/sourceInfo" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="Fuente: ninguna" android:textSize="12sp"/>
+
+    <!-- Modo: video / imagen / stream -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="12dp">
+      <com.google.android.material.button.MaterialButton android:id="@+id/modeVideo"
+          android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="Video"/>
+      <com.google.android.material.button.MaterialButton android:id="@+id/modeImage"
+          android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="🖼 Imagen"/>
+      <com.google.android.material.button.MaterialButton android:id="@+id/modeStream"
+          android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="📡 Stream"/>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/selFile"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="📂 Seleccionar de multimedia"/>
+
+    <EditText android:id="@+id/urlInput" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="rtmp://…  |  rtsp://…  |  http://…"
+        android:inputType="textUri" android:visibility="gone"/>
+
+    <!-- Switch principal START injection -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="12dp">
+      <TextView android:layout_width="0dp" android:layout_weight="1"
+          android:layout_height="wrap_content" android:text="START INJECTION" android:textSize="16sp"/>
+      <Switch android:id="@+id/switchMain"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="AI Face Bypass"/>
+      <Switch android:id="@+id/switchAi" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- Modo suplantación frontal + seguridad -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="4dp">
+      <TextView android:layout_width="0dp" android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:text="Suplantar cámara FRONTAL real (replace:front)"/>
+      <Switch android:id="@+id/switchReplaceFront"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="Controles flotantes"/>
+      <Switch android:id="@+id/switchFloating" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <TextView android:id="@+id/safetyStatus"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="⚪ Modo normal — cámaras físicas"
+        android:textSize="13sp" android:textStyle="bold"
+        android:padding="8dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRestore"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="4dp" android:layout_marginBottom="8dp"
+        android:text="🔧 Restaurar cámaras físicas"
+        app:backgroundTint="#FF6D00" app:icon="@android:drawable/ic_menu_revert"/>
+
+    <!-- Controles imagen -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="🛠 Ajustes" android:textStyle="bold" android:layout_marginTop="16dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rotación (0–270°)"/> <SeekBar android:id="@+id/rotSlider"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Zoom (1x–3x)"/> <SeekBar android:id="@+id/zoomSlider"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brillo"/> <SeekBar android:id="@+id/brightSlider"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Contraste"/> <SeekBar android:id="@+id/contrastSlider"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="Activar ruido"/>
+      <Switch android:id="@+id/switchNoise" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <SeekBar android:id="@+id/noiseSlider" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+          android:text="Micro polvo"/>
+      <Switch android:id="@+id/switchDust" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <SeekBar android:id="@+id/dustSlider" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    <!-- Pad de movimiento -->
+    <TextView android:text="Mover cuadro" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:textStyle="bold"/>
+    <GridLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:columnCount="3" android:layout_gravity="center">
+      <Space/><com.google.android.material.button.MaterialButton android:id="@+id/btnUp"
+          android:text="▲" android:layout_width="60dp" android:layout_height="50dp"/><Space/>
+      <com.google.android.material.button.MaterialButton android:id="@+id/btnLeft"
+          android:text="◀" android:layout_width="60dp" android:layout_height="50dp"/>
+      <com.google.android.material.button.MaterialButton android:id="@+id/btnDown"
+          android:text="▼" android:layout_width="60dp" android:layout_height="50dp"/>
+      <com.google.android.material.button.MaterialButton android:id="@+id/btnRight"
+          android:text="▶" android:layout_width="60dp" android:layout_height="50dp"/>
+    </GridLayout>
+  </LinearLayout>
+</ScrollView>

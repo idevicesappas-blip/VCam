@@ -1,0 +1,6 @@
+id=vcam
+name=VCam Virtual Camera HAL
+version=v1.0.0
+versionCode=1
+author=you
+description=Inyección de cámara virtual HAL (imagen/vídeo/RTMP-RTSP) con controles en vivo
