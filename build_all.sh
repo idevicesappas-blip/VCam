@@ -125,7 +125,32 @@ build_engine() {
     fi
 }
 
+# ============================================================
+# FASE 1.5 — Generar C++ desde AIDL (Clonando solo interfaces AOSP)
+# ============================================================
+build_aidl() {
+    local AIDL_OUT="$ROOT/native/aidl_gen"
+    [ -d "$AIDL_OUT/src" ] && return
+
+    c "Descargando interfaces AOSP (shallow clone)..."
+    mkdir -p "$ROOT/aosp"
+    [ -d "$ROOT/aosp/hardware_interfaces" ] || git clone --depth 1 https://android.googlesource.com/platform/hardware/interfaces "$ROOT/aosp/hardware_interfaces" >/dev/null 2>&1
+    [ -d "$ROOT/aosp/system_interfaces" ] || git clone --depth 1 https://android.googlesource.com/platform/system/hardware/interfaces "$ROOT/aosp/system_interfaces" >/dev/null 2>&1
+
+    c "Generando código C++ NDK desde AIDL..."
+    mkdir -p "$AIDL_OUT/include" "$AIDL_OUT/src"
+    local AIDL_BIN="$SDK_DIR/build-tools/34.0.0/aidl"
+
+    local AIDL_INC="-I$ROOT/aosp/hardware_interfaces/camera/provider/aidl -I$ROOT/aosp/hardware_interfaces/camera/device/aidl -I$ROOT/aosp/hardware_interfaces/camera/common/aidl -I$ROOT/aosp/hardware_interfaces/graphics/common/aidl -I$ROOT/aosp/system_interfaces/common/aidl"
+
+    find "$ROOT/aosp/hardware_interfaces/camera" "$ROOT/aosp/hardware_interfaces/graphics/common" "$ROOT/aosp/system_interfaces/common" -name "*.aidl" -type f | while read -r f; do
+        "$AIDL_BIN" --lang=ndk $AIDL_INC -h "$AIDL_OUT/include" -o "$AIDL_OUT/src" "$f" 2>/dev/null || true
+    done
+    ok "Bindings AIDL generados en native/aidl_gen"
+}
+
 if [ "$ONLY_APK" = false ]; then
+    build_aidl
     for ABI in "${ABIS[@]}"; do build_engine "$ABI"; done
 fi
 

@@ -26,43 +26,20 @@ target_link_libraries(vcam_core
 
 add_library(gralloc_access STATIC gralloc_access.cpp)
 target_include_directories(gralloc_access PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(gralloc_access PUBLIC libnativewindow libui libgralloctypes libhidlbase)
-
-# ---------- Motor con malloc hooks HIDL (Android 10-12) ----------
-if (${ANDROID_SDK} LESS 33)
-    # Enlaza los bindings HIDL (los .so existen en /vendor/lib/ del sistema
-    # o se precompilan con out/soong/host/linux-x86/bin/hidl-gen)
-    add_library(engine_hidl SHARED
-        hal_wrapper_hidl.cpp
-    )
-    target_link_libraries(engine_hidl vcam_core hidlbase log c++_static
-        android.hardware.camera.provider@2.4
-        android.hardware.camera.provider@2.5
-        android.hardware.camera.provider@2.6
-        android.hardware.camera.provider@2.7
-        android.hardware.camera.device@3.2
-        android.hardware.camera.device@3.3
-        android.hardware.camera.device@3.4
-        android.hardware.camera.device@3.5
-        android.hardware.camera.device@3.6
-    )
-    target_compile_options(engine_hidl PRIVATE -O2)
-endif()
+target_link_libraries(gralloc_access PUBLIC libnativewindow)
 
 # ---------- Binario provider AIDL (Android 13-16) ----------
+file(GLOB_RECURSE AIDL_SOURCES "${CMAKE_SOURCE_DIR}/aidl_gen/src/*.cpp")
+
 add_executable(vcam_provider_aidl
     hal_wrapper_aidl.cpp
+    ${AIDL_SOURCES}
 )
 target_link_libraries(vcam_provider_aidl
     vcam_core
     gralloc_access
-    android.hardware.camera.provider-V1-ndk
-    android.hardware.camera.device-V1-ndk
-    android.hardware.common-V2-ndk
-    android.hardware.graphics.common-V3-ndk
     libbinder_ndk
     libnativewindow      # AHardwareBuffer_lock para gralloc
-    libgralloctypes
     libcamera_metadata    # NDK camera metadata (fillStaticMetadata)
     log
     c++_static
@@ -70,5 +47,6 @@ target_link_libraries(vcam_provider_aidl
 )
 target_include_directories(vcam_provider_aidl PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/aidl_gen/include
 )
-target_compile_options(vcam_provider_aidl PRIVATE -O2 -Wall)
+target_compile_options(vcam_provider_aidl PRIVATE -O2 -Wall -Wno-error)
