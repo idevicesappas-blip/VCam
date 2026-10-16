@@ -22,9 +22,9 @@ jobs:
 
       - name: NDK + CMake
         run: |
-          yes | sdkmanager --licenses > /dev/null
-          sdkmanager "ndk;26.2.11394342" "cmake;3.22.1" > /dev/null
-          sdkmanager --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;26.2.11394342" "cmake;3.22.1" > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
 
       - name: Cache FFmpeg prebuilt
         uses: actions/cache@v4
@@ -40,10 +40,10 @@ jobs:
           chmod +x build_all.sh
 
       - name: Build ALL (ffmpeg → engine → APK → module)
-        run: ./build_all.sh
+        run: bash ./build_all.sh
         env:
-          NDK_DIR: $HOME/Android/Sdk/ndk/26.2.11394342
-          SDK_DIR: $HOME/Android/Sdk
+          NDK_DIR: ${{ env.ANDROID_HOME }}/ndk/26.2.11394342
+          SDK_DIR: ${{ env.ANDROID_HOME }}
 
       - name: Upload módulo
         uses: actions/upload-artifact@v4
