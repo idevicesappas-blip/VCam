@@ -13,7 +13,10 @@ add_library(vcam_core STATIC
     frame_processor.cpp
     video_source.cpp
 )
-target_include_directories(vcam_core PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(vcam_core PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${FFMPEG_ROOT}/include
+)
 target_compile_options(vcam_core PRIVATE -O2 -fno-exceptions)
 target_link_libraries(vcam_core
     PUBLIC

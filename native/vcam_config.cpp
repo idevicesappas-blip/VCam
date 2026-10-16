@@ -7,12 +7,12 @@
 namespace vcam {
 
 // --- Mini parser JSON (sin dependencias, para config plana) ---
-static std::string jget(const std::string& s, const std::string& key) {
+static std::string jget(const std::string& s, const std::string& key, const std::string& def = "") {
     std::string pat = "\"" + key + "\"";
     size_t p = s.find(pat);
-    if (p == std::string::npos) return "";
+    if (p == std::string::npos) return def;
     p = s.find(':', p + pat.size());
-    if (p == std::string::npos) return "";
+    if (p == std::string::npos) return def;
     p++;
     while (p < s.size() && (s[p] == ' ' || s[p] == '\t')) p++;
     if (s[p] == '"') { size_t e = s.find('"', p + 1); return s.substr(p + 1, e - p - 1); }
