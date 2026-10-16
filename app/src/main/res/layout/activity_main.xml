@@ -8,6 +8,14 @@
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="🎥 VCam — Cámara Virtual HAL" android:textSize="20sp" android:textStyle="bold"/>
 
+    <!-- Botón de Exportar Módulo -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnExportModule"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
+        android:text="📥 Guardar Módulo ZIP en Descargas"
+        app:backgroundTint="#4CAF50" app:icon="@android:drawable/ic_menu_save"/>
+
     <!-- Preview de lo inyectado -->
     <FrameLayout android:layout_width="match_parent" android:layout_height="220dp"
         android:layout_marginTop="12dp" android:background="#000">

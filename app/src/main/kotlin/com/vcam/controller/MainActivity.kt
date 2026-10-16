@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnLeft: MaterialButton
     private lateinit var btnRight: MaterialButton
     private lateinit var btnRestore: MaterialButton
+    private lateinit var btnExportModule: MaterialButton
     private lateinit var previewState: TextView
     private lateinit var sourceInfo: TextView
     private lateinit var safetyStatus: TextView
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         btnUp = findViewById(R.id.btnUp); btnDown = findViewById(R.id.btnDown)
         btnLeft = findViewById(R.id.btnLeft); btnRight = findViewById(R.id.btnRight)
         btnRestore = findViewById(R.id.btnRestore)
+        btnExportModule = findViewById(R.id.btnExportModule)
         previewState = findViewById(R.id.previewState)
         sourceInfo = findViewById(R.id.sourceInfo)
         safetyStatus = findViewById(R.id.safetyStatus)
@@ -214,6 +216,8 @@ class MainActivity : AppCompatActivity() {
             }.start()
         }
 
+        btnExportModule.setOnClickListener { exportModuleZip() }
+
         handler.postDelayed(object : Runnable {
             override fun run() {
                 if (switchMain.isChecked || switchReplaceFront.isChecked) {
@@ -264,6 +268,22 @@ class MainActivity : AppCompatActivity() {
         cfg.put("panX", (cfg.optDouble("panX", 0.0) + dx).coerceIn(-1.0, 1.0))
         cfg.put("panY", (cfg.optDouble("panY", 0.0) + dy).coerceIn(-1.0, 1.0))
         persist(); applyPreviewTransform()
+    }
+
+    private fun exportModuleZip() {
+        try {
+            val downloadsDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+            val outFile = java.io.File(downloadsDir, "vcam-module.zip")
+            
+            assets.open("vcam-module.zip").use { input ->
+                outFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            toast("✅ Módulo guardado en: Descargas/vcam-module.zip")
+        } catch (e: Exception) {
+            toast("❌ Error al exportar: ${e.message}")
+        }
     }
 
     private fun persist() = VcamController.writeConfig(cfg)

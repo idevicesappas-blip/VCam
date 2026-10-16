@@ -25,6 +25,7 @@ target_link_libraries(vcam_core
 )
 
 add_library(gralloc_access STATIC gralloc_access.cpp)
+target_include_directories(gralloc_access PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(gralloc_access PUBLIC libnativewindow libui libgralloctypes libhidlbase)
 
 # ---------- Motor con malloc hooks HIDL (Android 10-12) ----------
